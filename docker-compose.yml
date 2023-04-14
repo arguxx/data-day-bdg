@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: test-db
+            MYSQL_USER: argian
+            MYSQL_PASSWORD: argian
+        ports:
+            - "6033:3306"
+        volumes:
+            - ./mysqldata:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin:5.2.0
+        container_name: phpmyadmin
+        links:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+        ports:
+            - 8081:80
