@@ -1,0 +1,30 @@
+version: "3"
+services:
+    dataday:
+        image: mysql:latest
+        environment:
+            MYSQL_DATABASE: myDb
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+        ports:
+            - "3306:3306"
+        volumes:
+            - db_data:/var/lib/mysql
+            - ./dump:/docker-entrypoint-initdb.d
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+    web:
+        image: rgx69/php-data-day:latest
+        environment:
+            MYSQL_USER: user
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+        ports:
+            - "80:80"
+        depends_on:
+            - dataday
+        volumes:
+            - ./app:/var/www/html/
+volumes:
+    db_data:
